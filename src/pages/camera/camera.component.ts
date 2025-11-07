@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BranchService } from '../../services/branch.service';
 
-// To inform TypeScript about the mediapipe library loaded from the CDN
-declare var mediapipe: any;
+// To inform TypeScript about the TensorFlow.js and coco-ssd libraries loaded from the CDN
+declare var tf: any;
+declare var cocoSsd: any;
 
 interface TrackedPerson {
   id: number;
@@ -35,22 +36,23 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
 
   status = signal<'loading' | 'running' | 'error' | 'no_camera'>('loading');
   errorMessage = signal<string>('');
+  debugData = signal<TrackedPerson[]>([]);
   
-  private objectDetector: any;
-  private runningMode: 'IMAGE' | 'VIDEO' = 'VIDEO';
+  private model: any;
   private animationFrameId: number | null = null;
-  private lastVideoTime = -1;
+  private isDetecting = false;
 
   private trackedPeople = new Map<number, TrackedPerson>();
   private nextId = 1;
   private readonly INACTIVITY_THRESHOLD = 2000; // ms
+  private readonly SCORE_THRESHOLD = 0.5;
 
   constructor() {
     this.branchId.set(this.route.snapshot.paramMap.get('id'));
   }
 
   async ngAfterViewInit() {
-    await this.initializeMediaPipe();
+    await this.initializeAiModel();
     await this.enableCam();
   }
 
@@ -64,33 +66,23 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         stream.getTracks().forEach(track => track.stop());
         video.srcObject = null;
     }
-    if (this.objectDetector) {
-        this.objectDetector.close();
-    }
   }
 
-  private async initializeMediaPipe() {
+  getDebugJSON(): string {
+    return JSON.stringify(this.debugData(), null, 2);
+  }
+
+  private async initializeAiModel() {
     try {
-      const { ObjectDetector, FilesetResolver } = mediapipe.tasks.vision;
-      const vision = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12/wasm'
-      );
-      this.objectDetector = await ObjectDetector.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/float16/1/efficientdet_lite0.tflite',
-          delegate: 'GPU',
-        },
-        runningMode: this.runningMode,
-        scoreThreshold: 0.5,
-        categoryAllowlist: ['person'],
-      });
+      // Load the COCO-SSD model.
+      this.model = await cocoSsd.load();
     } catch (e) {
-        this.handleError('Failed to initialize MediaPipe AI model.', e);
+        this.handleError('Failed to initialize TensorFlow.js AI model.', e);
     }
   }
 
   private async enableCam() {
-    if (!this.objectDetector) {
+    if (!this.model) {
       this.handleError('AI model not ready.');
       return;
     }
@@ -113,28 +105,27 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private predictWebcam() {
+  private async predictWebcam() {
     const video = this.videoElement.nativeElement;
     if (video.paused || video.ended || this.status() !== 'running' || video.readyState < 2) {
       this.animationFrameId = requestAnimationFrame(() => this.predictWebcam());
       return;
     }
 
-    const canvas = this.canvasElement.nativeElement;
-    const ctx = canvas.getContext('2d')!;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    
-    const now = performance.now();
-    if (video.currentTime !== this.lastVideoTime) {
-      this.lastVideoTime = video.currentTime;
-      const detections = this.objectDetector.detectForVideo(video, now);
-      this.processDetections(detections.detections);
+    // Run detection asynchronously
+    if (!this.isDetecting) {
+        this.isDetecting = true;
+        const predictions = await this.model.detect(video);
+        this.processDetections(predictions);
+        this.isDetecting = false;
     }
     
+    // Drawing logic
+    const canvas = this.canvasElement.nativeElement;
+    const ctx = canvas.getContext('2d')!;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // Draw the video frame to the canvas first
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     this.drawDetections(ctx);
     this.cdr.detectChanges();
@@ -142,15 +133,14 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
     this.animationFrameId = requestAnimationFrame(() => this.predictWebcam());
   }
   
-  private processDetections(detections: any[]) {
+  private processDetections(predictions: any[]) {
     const now = Date.now();
-    // Map mediapipe's boundingBox (with originX/originY) to our internal box model (with x/y).
-    const currentFrameBoxes: { x: number, y: number, width: number, height: number, cx: number, cy: number }[] = detections
-      .filter(d => d.boundingBox) // Ensure bounding box exists
-      .map(d => {
-        const box = d.boundingBox;
-        return { x: box.originX, y: box.originY, width: box.width, height: box.height, cx: box.originX + box.width / 2, cy: box.originY + box.height / 2 };
-    });
+    const currentFrameBoxes: { x: number, y: number, width: number, height: number, cx: number, cy: number }[] = predictions
+      .filter(p => p.class === 'person' && p.score > this.SCORE_THRESHOLD)
+      .map(p => {
+          const [x, y, width, height] = p.bbox;
+          return { x, y, width, height, cx: x + width / 2, cy: y + height / 2 };
+      });
     
     const matchedIds = new Set<number>();
 
@@ -192,6 +182,8 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         this.branchService.personEvent(this.branchId()!, 'out');
       }
     }
+
+    this.debugData.set(Array.from(this.trackedPeople.values()));
   }
 
   private drawDetections(ctx: CanvasRenderingContext2D) {

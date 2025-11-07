@@ -39,4 +39,17 @@
     <canvas #canvasElement class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl" [class.invisible]="status() !== 'running'"></canvas>
   </div>
 
+  <!-- Debug Window -->
+  <div class="mt-6 bg-gray-900 text-white font-mono text-xs rounded-lg shadow-inner border border-gray-700 h-48 overflow-y-auto p-4">
+    <div class="flex justify-between items-center border-b border-gray-600 pb-2 mb-2">
+      <h3 class="text-sm font-semibold uppercase tracking-wider text-gray-400">Live Debug Output</h3>
+      <p class="text-gray-500">Tracked: {{ debugData().length }}</p>
+    </div>
+    @if (debugData().length > 0) {
+      <pre class="whitespace-pre-wrap">{{ getDebugJSON() }}</pre>
+    } @else {
+      <p class="text-gray-500">Awaiting detection...</p>
+    }
+  </div>
+
 </div>
