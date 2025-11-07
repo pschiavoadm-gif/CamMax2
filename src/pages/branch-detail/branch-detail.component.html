@@ -5,37 +5,19 @@
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Back to Dashboard
+        Volver al Panel
       </a>
       <h1 class="text-3xl font-bold text-brand-dark-gray mt-2">{{ branchData.name }}</h1>
       <p class="text-md text-brand-medium-gray">{{ branchData.location }}</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Gender Ratio -->
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 md:col-span-1 lg:col-span-1">
-        <h3 class="text-lg font-semibold text-brand-dark-gray mb-4">Gender Ratio</h3>
-        <div class="flex justify-center items-center my-6">
-          <div class="w-32 h-32 rounded-full" [style]="pieChartStyle()"></div>
-        </div>
-        <div class="flex justify-around text-sm">
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full bg-brand-cyan"></span>
-            <span>Male ({{ branchData.stats.genderRatio.male * 100 }}%)</span>
-          </div>
-          <div class="flex items-center space-x-2">
-            <span class="w-3 h-3 rounded-full bg-blue-400"></span>
-            <span>Female ({{ branchData.stats.genderRatio.female * 100 }}%)</span>
-          </div>
-        </div>
-      </div>
-
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Hourly Traffic -->
-      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 md:col-span-2 lg:col-span-3">
-        <h3 class="text-lg font-semibold text-brand-dark-gray mb-4">Hourly Traffic (Today)</h3>
+      <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200 md:col-span-3">
+        <h3 class="text-lg font-semibold text-brand-dark-gray mb-4">Tráfico por Hora (Hoy)</h3>
         <div class="h-64 flex items-end space-x-1">
           @for (stat of hourlyStats(); track stat.hour) {
-            <div class="flex-1 h-full flex flex-col justify-end items-center group">
+            <div class="flex-1 h-full flex flex-col justify-end items-center group relative">
               <div class="w-full h-full flex items-end justify-center">
                 <div 
                   class="w-3/4 bg-brand-cyan rounded-t-md group-hover:opacity-80 transition-opacity"
@@ -43,8 +25,8 @@
                 </div>
               </div>
               <span class="text-xs text-brand-medium-gray mt-1">{{ stat.hour.toString().padStart(2, '0') }}</span>
-              <div class="absolute bottom-full mb-2 hidden group-hover:block bg-brand-dark-gray text-white text-xs rounded py-1 px-2">
-                Entries: {{ stat.ins }}
+              <div class="absolute bottom-full mb-2 hidden group-hover:block bg-brand-dark-gray text-white text-xs rounded py-1 px-2 whitespace-nowrap">
+                Entradas: {{ stat.ins }}
               </div>
             </div>
           }
@@ -52,6 +34,6 @@
       </div>
     </div>
   } @else {
-    <p class="text-center text-brand-medium-gray">Loading branch details...</p>
+    <p class="text-center text-brand-medium-gray">Cargando detalles de la sucursal...</p>
   }
 </div>

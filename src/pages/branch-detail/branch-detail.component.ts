@@ -29,15 +29,6 @@ export class BranchDetailComponent {
 
   maxHourlyIn = computed(() => Math.max(...this.hourlyStats().map(s => s.ins), 0));
 
-  pieChartStyle = computed(() => {
-    const branchData = this.branch();
-    if (!branchData) return {};
-    const malePercent = branchData.stats.genderRatio.male * 100;
-    return {
-      'background': `conic-gradient(#1178C0 ${malePercent}%, #60a5fa 0)`
-    };
-  });
-
   constructor() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');

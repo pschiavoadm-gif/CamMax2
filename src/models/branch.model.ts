@@ -10,15 +10,11 @@ export interface BranchStats {
   currentPeople: number;
   totalInToday: number;
   totalOutToday: number;
-  avgAge: number;
-  genderRatio: { male: number; female: number };
   avgDwellTime: number; // in seconds
 }
 
 export interface DetectionEvent {
   personId: string;
-  gender: 'male' | 'female';
-  age: number;
   event: 'in' | 'out';
   dwellTime: number; // in seconds
   timestamp: Date;

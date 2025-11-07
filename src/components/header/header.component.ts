@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   navLinks = [
-    { path: '/dashboard', label: 'Dashboard' },
-    { path: '/config', label: 'Configuration' }
+    { path: '/dashboard', label: 'Panel Principal' },
+    { path: '/config', label: 'Configuración' }
   ];
 }

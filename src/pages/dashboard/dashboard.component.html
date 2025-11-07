@@ -1,9 +1,9 @@
 <div class="space-y-8">
   <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-200">
-    <h2 class="text-sm font-medium text-brand-medium-gray uppercase tracking-wider">Global Live View</h2>
+    <h2 class="text-sm font-medium text-brand-medium-gray uppercase tracking-wider">Vista Global en Vivo</h2>
     <div class="mt-2 flex items-baseline space-x-2">
         <p class="text-4xl font-bold text-brand-dark-gray">{{ globalTotalPeople() }}</p>
-        <p class="text-lg font-medium text-gray-500">People currently detected</p>
+        <p class="text-lg font-medium text-gray-500">Personas detectadas actualmente</p>
     </div>
   </div>
 
@@ -27,34 +27,30 @@
           <div class="mt-6 grid grid-cols-2 gap-4 text-center">
             <div>
               <p class="text-2xl font-bold text-brand-cyan">{{ branch.stats.currentPeople }}</p>
-              <p class="text-xs text-brand-medium-gray uppercase">Inside Now</p>
+              <p class="text-xs text-brand-medium-gray uppercase">Adentro ahora</p>
             </div>
-            <div>
-              <p class="text-2xl font-bold text-brand-dark-gray">{{ branch.stats.avgAge }}</p>
-              <p class="text-xs text-brand-medium-gray uppercase">Avg. Age</p>
-            </div>
-            <div>
+             <div>
               <div class="flex justify-center items-baseline space-x-1">
                 <p class="text-lg font-semibold text-brand-dark-gray">{{ branch.stats.totalInToday }}</p>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l.293.293a1 1 0 001.414-1.414l-3-3z" clip-rule="evenodd" /></svg>
               </div>
-              <p class="text-xs text-brand-medium-gray uppercase">Entries Today</p>
+              <p class="text-xs text-brand-medium-gray uppercase">Entradas Hoy</p>
             </div>
             <div>
               <div class="flex justify-center items-baseline space-x-1">
                 <p class="text-lg font-semibold text-brand-dark-gray">{{ branch.stats.totalOutToday }}</p>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.707-7.707a1 1 0 001.414 1.414l3-3a1 1 0 00-1.414-1.414L11 10.586V7a1 1 0 10-2 0v3.586l-.293-.293a1 1 0 00-1.414 1.414l3 3z" clip-rule="evenodd" /></svg>
               </div>
-              <p class="text-xs text-brand-medium-gray uppercase">Exits Today</p>
+              <p class="text-xs text-brand-medium-gray uppercase">Salidas Hoy</p>
             </div>
           </div>
         </div>
         <div class="bg-gray-50 px-5 py-3 flex justify-between space-x-2">
-          <a [routerLink]="['/branch', branch.id]" class="w-full text-center text-sm font-semibold text-brand-cyan hover:text-blue-800 transition">View Details</a>
+          <a [routerLink]="['/branch', branch.id]" class="w-full text-center text-sm font-semibold text-brand-cyan hover:text-blue-800 transition">Ver Detalles</a>
           @if (branch.cameraStatus === 'online') {
-            <a [routerLink]="['/camera', branch.id]" class="w-full text-center text-sm font-semibold text-brand-cyan hover:text-blue-800 transition">Live Camera</a>
+            <a [routerLink]="['/camera', branch.id]" class="w-full text-center text-sm font-semibold text-brand-cyan hover:text-blue-800 transition">Cámara en Vivo</a>
           } @else {
-            <span class="w-full text-center text-sm font-semibold text-gray-400 cursor-not-allowed">Live Camera</span>
+            <span class="w-full text-center text-sm font-semibold text-gray-400 cursor-not-allowed">Cámara en Vivo</span>
           }
         </div>
       </div>

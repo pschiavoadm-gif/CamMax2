@@ -75,13 +75,13 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
       // Load the COCO-SSD model.
       this.model = await cocoSsd.load();
     } catch (e) {
-        this.handleError('Failed to initialize TensorFlow.js AI model.', e);
+        this.handleError('Fallo al inicializar el modelo de IA TensorFlow.js.', e);
     }
   }
 
   private async enableCam() {
     if (!this.model) {
-      this.handleError('AI model not ready.');
+      this.handleError('El modelo de IA no está listo.');
       return;
     }
 
@@ -94,11 +94,11 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
           this.predictWebcam();
         });
       } catch (err) {
-        this.handleError('Camera access was denied. Please allow camera permissions.', err);
+        this.handleError('Se denegó el acceso a la cámara. Por favor, permita el acceso a la cámara en la configuración de su navegador.', err);
         this.status.set('no_camera');
       }
     } else {
-        this.handleError('Your browser does not support camera access.');
+        this.handleError('Su navegador no soporta acceso a la cámara.');
         this.status.set('no_camera');
     }
   }
@@ -191,7 +191,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         ctx.strokeRect(box.x, box.y, box.width, box.height);
 
         const dwellTime = ((now - person.startTime) / 1000).toFixed(0);
-        const label = `Person ${person.id} | ${dwellTime}s`;
+        const label = `Persona ${person.id} | ${dwellTime}s`;
         
         ctx.fillStyle = '#1178C0';
         ctx.font = '14px Inter, sans-serif';

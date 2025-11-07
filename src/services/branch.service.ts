@@ -2,10 +2,10 @@ import { Injectable, signal, computed } from '@angular/core';
 import { Branch, HourlyStat } from '../models/branch.model';
 
 const MOCK_BRANCHES: Branch[] = [
-  { id: 'branch_01', name: 'Downtown Central', location: 'New York, NY', cameraStatus: 'online', stats: { currentPeople: 12, totalInToday: 152, totalOutToday: 140, avgAge: 34, genderRatio: { male: 0.6, female: 0.4 }, avgDwellTime: 180 } },
-  { id: 'branch_02', name: 'Westside Mall', location: 'Los Angeles, CA', cameraStatus: 'online', stats: { currentPeople: 25, totalInToday: 320, totalOutToday: 295, avgAge: 28, genderRatio: { male: 0.45, female: 0.55 }, avgDwellTime: 320 } },
-  { id: 'branch_03', name: 'North Point Plaza', location: 'Chicago, IL', cameraStatus: 'offline', stats: { currentPeople: 0, totalInToday: 88, totalOutToday: 88, avgAge: 41, genderRatio: { male: 0.5, female: 0.5 }, avgDwellTime: 210 } },
-  { id: 'branch_04', name: 'Southpark Center', location: 'Houston, TX', cameraStatus: 'online', stats: { currentPeople: 18, totalInToday: 210, totalOutToday: 192, avgAge: 31, genderRatio: { male: 0.58, female: 0.42 }, avgDwellTime: 250 } },
+  { id: 'branch_01', name: 'Centro Histórico', location: 'Ciudad de México, MX', cameraStatus: 'online', stats: { currentPeople: 12, totalInToday: 152, totalOutToday: 140, avgDwellTime: 180 } },
+  { id: 'branch_02', name: 'Westside Mall', location: 'Los Angeles, CA', cameraStatus: 'online', stats: { currentPeople: 25, totalInToday: 320, totalOutToday: 295, avgDwellTime: 320 } },
+  { id: 'branch_03', name: 'Plaza del Norte', location: 'Madrid, ES', cameraStatus: 'offline', stats: { currentPeople: 0, totalInToday: 88, totalOutToday: 88, avgDwellTime: 210 } },
+  { id: 'branch_04', name: 'Centro Comercial Sur', location: 'Buenos Aires, AR', cameraStatus: 'online', stats: { currentPeople: 18, totalInToday: 210, totalOutToday: 192, avgDwellTime: 250 } },
 ];
 
 const MOCK_HOURLY_DATA: { [key: string]: HourlyStat[] } = {

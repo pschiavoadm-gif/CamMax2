@@ -1,6 +1,6 @@
 {
-  "name": "Camera Viewer",
-  "description": "A simple application to display your device's camera feed in real-time.",
+  "name": "Visor de Cámara IA",
+  "description": "Aplicación para detectar personas en tiempo real usando la cámara.",
   "requestFramePermissions": [
     "camera"
   ]
