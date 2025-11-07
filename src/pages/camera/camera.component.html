@@ -1,0 +1,42 @@
+<div class="max-w-7xl mx-auto">
+  <div class="mb-6">
+    <a routerLink="/dashboard" class="text-sm font-medium text-brand-cyan hover:underline flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+      Back to Dashboard
+    </a>
+    @if(branch(); as branchData) {
+      <h1 class="text-3xl font-bold text-brand-dark-gray mt-2">Live Camera: {{ branchData.name }}</h1>
+    }
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-md border border-gray-200 p-4 aspect-video relative flex justify-center items-center">
+    @switch (status()) {
+      @case ('loading') {
+        <div class="text-center">
+          <p class="text-lg font-semibold text-brand-dark-gray">Initializing Camera and AI Model...</p>
+          <p class="text-brand-medium-gray">Please wait a moment.</p>
+        </div>
+      }
+      @case ('error') {
+        <div class="text-center text-red-600">
+          <p class="text-lg font-semibold">An Error Occurred</p>
+          <p>{{ errorMessage() }}</p>
+        </div>
+      }
+      @case ('no_camera') {
+        <div class="text-center">
+          <p class="text-lg font-semibold text-brand-dark-gray">Camera Not Available</p>
+          <p class="text-brand-medium-gray">{{ errorMessage() }}</p>
+          <p class="text-sm mt-4">This feature requires camera access to function.</p>
+        </div>
+      }
+      @case ('running') {
+        <!-- The video and canvas will be visible -->
+      }
+    }
+    
+    <video #videoElement class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl" autoplay playsinline [class.invisible]="status() !== 'running'"></video>
+    <canvas #canvasElement class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl" [class.invisible]="status() !== 'running'"></canvas>
+  </div>
+
+</div>

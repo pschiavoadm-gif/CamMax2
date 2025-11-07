@@ -1,0 +1,43 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-brand-dark-gray">Branch Configuration</h1>
+    <button class="bg-brand-cyan text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-colors">
+      Add New Branch
+    </button>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+          <th scope="col" class="relative px-6 py-3">
+            <span class="sr-only">Edit</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        @for (branch of branches(); track branch.id) {
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-brand-dark-gray">{{ branch.name }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">{{ branch.id }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ branch.location }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span 
+                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full"
+                [class]="branch.cameraStatus === 'online' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                {{ branch.cameraStatus }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <a href="#" class="text-brand-cyan hover:text-blue-800">Edit</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

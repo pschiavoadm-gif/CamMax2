@@ -1,0 +1,23 @@
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center space-x-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-brand-cyan" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        <h1 class="text-xl font-bold text-brand-dark-gray">Vision AI</h1>
+      </div>
+      <nav class="flex space-x-4">
+        @for (link of navLinks; track link.path) {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="text-brand-cyan border-brand-cyan"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="text-gray-500 hover:text-brand-cyan px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent transition-colors duration-200">
+            {{ link.label }}
+          </a>
+        }
+      </nav>
+    </div>
+  </div>
+</header>
