@@ -10,8 +10,6 @@ declare var cocoSsd: any;
 interface TrackedPerson {
   id: number;
   box: { x: number, y: number, width: number, height: number, cx: number, cy: number };
-  gender: 'male' | 'female';
-  age: number;
   startTime: number;
   lastSeen: number;
 }
@@ -165,8 +163,6 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         const newPerson: TrackedPerson = {
           id: this.nextId++,
           box: newBox,
-          gender: Math.random() > 0.5 ? 'male' : 'female',
-          age: Math.floor(18 + Math.random() * 50),
           startTime: now,
           lastSeen: now,
         };
@@ -195,7 +191,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         ctx.strokeRect(box.x, box.y, box.width, box.height);
 
         const dwellTime = ((now - person.startTime) / 1000).toFixed(0);
-        const label = `ID ${person.id} | ${person.gender} | ${person.age}y | ${dwellTime}s`;
+        const label = `Person ${person.id} | ${dwellTime}s`;
         
         ctx.fillStyle = '#1178C0';
         ctx.font = '14px Inter, sans-serif';

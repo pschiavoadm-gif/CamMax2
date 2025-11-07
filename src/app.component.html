@@ -1,32 +1,6 @@
-<main class="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gray-900">
-  <div class="w-full max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold text-center text-white mb-2"></h1>
-    <p class="text-center text-gray-400 mb-6"></p>
-
-    <div class="bg-gray-800 rounded-lg shadow-2xl overflow-hidden aspect-video relative flex justify-center items-center border-2 border-gray-700">
-      @switch (status()) {
-        @case ('loading') {
-          <div class="text-center text-gray-300">
-            <p class="text-lg font-semibold">Requesting Camera Access...</p>
-            <p>Please approve the permission prompt.</p>
-          </div>
-        }
-        @case ('error') {
-          <div class="text-center text-red-400 p-4">
-            <p class="text-lg font-semibold">An Error Occurred</p>
-            <p>{{ errorMessage() }}</p>
-          </div>
-        }
-        @case ('no_camera') {
-          <div class="text-center text-yellow-400 p-4">
-            <p class="text-lg font-semibold">Camera Not Available</p>
-            <p>{{ errorMessage() }}</p>
-          </div>
-        }
-      }
-      
-      <!-- Video is now the only element here -->
-      <video #videoElement class="absolute top-0 left-0 w-full h-full object-cover" autoplay playsinline [class.invisible]="status() !== 'running'"></video>
-    </div>
+<app-header></app-header>
+<main class="py-8 bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <router-outlet></router-outlet>
   </div>
 </main>

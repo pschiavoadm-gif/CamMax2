@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Camera Viewer</title>
+  <title>Vision AI Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -10,6 +10,19 @@
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.20.0/dist/tf.min.js"></script>
   <!-- COCO-SSD Model -->
   <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.3/dist/coco-ssd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-cyan': '#1178C0',
+            'brand-dark-gray': '#333F48',
+            'brand-medium-gray': '#6B7280',
+          }
+        }
+      }
+    }
+  </script>
 <script type="importmap">
 {
   "imports": {
@@ -24,7 +37,7 @@
 }
 </script>
 </head>
-<body class="bg-gray-900 text-white font-sans antialiased">
+<body class="bg-gray-50 font-sans antialiased">
   <app-root></app-root>
 </body>
 </html>
