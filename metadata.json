@@ -1,6 +1,6 @@
 {
-  "name": "Vision AI People Counter",
-  "description": "A real-time dashboard that uses your device's camera to detect people, estimate their demographics, and track analytics like presence and dwell time across multiple simulated locations.",
+  "name": "Camera Viewer",
+  "description": "A simple application to display your device's camera feed in real-time.",
   "requestFramePermissions": [
     "camera"
   ]

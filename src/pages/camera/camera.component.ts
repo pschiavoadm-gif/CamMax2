@@ -58,7 +58,12 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
-    this.videoElement.nativeElement.srcObject = null;
+    const video = this.videoElement?.nativeElement;
+    if (video && video.srcObject) {
+        const stream = video.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+    }
     if (this.objectDetector) {
         this.objectDetector.close();
     }
@@ -110,6 +115,11 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
 
   private predictWebcam() {
     const video = this.videoElement.nativeElement;
+    if (video.paused || video.ended || this.status() !== 'running' || video.readyState < 2) {
+      this.animationFrameId = requestAnimationFrame(() => this.predictWebcam());
+      return;
+    }
+
     const canvas = this.canvasElement.nativeElement;
     const ctx = canvas.getContext('2d')!;
 
@@ -124,16 +134,20 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
     }
     
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Draw the video frame to the canvas first
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     this.drawDetections(ctx);
+    this.cdr.detectChanges();
 
     this.animationFrameId = requestAnimationFrame(() => this.predictWebcam());
   }
   
   private processDetections(detections: any[]) {
     const now = Date.now();
-    // FIX: Map mediapipe's boundingBox (with originX/originY) to our internal box model (with x/y) to match the TrackedPerson interface.
-    const currentFrameBoxes: any[] = detections.map(d => {
+    // Map mediapipe's boundingBox (with originX/originY) to our internal box model (with x/y).
+    const currentFrameBoxes: { x: number, y: number, width: number, height: number, cx: number, cy: number }[] = detections
+      .filter(d => d.boundingBox) // Ensure bounding box exists
+      .map(d => {
         const box = d.boundingBox;
         return { x: box.originX, y: box.originY, width: box.width, height: box.height, cx: box.originX + box.width / 2, cy: box.originY + box.height / 2 };
     });
@@ -145,6 +159,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
       let bestMatch: { id: number; dist: number } | null = null;
       for (const [id, person] of this.trackedPeople.entries()) {
         const dist = Math.hypot(newBox.cx - person.box.cx, newBox.cy - person.box.cy);
+        // Use a threshold for matching (e.g., 50 pixels)
         if (dist < 50 && (bestMatch === null || dist < bestMatch.dist)) {
             bestMatch = { id, dist };
         }
@@ -156,7 +171,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         person.lastSeen = now;
         matchedIds.add(bestMatch.id);
       } else {
-        // New person
+        // New person detected
         const newPerson: TrackedPerson = {
           id: this.nextId++,
           box: newBox,
@@ -170,7 +185,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
       }
     }
     
-    // Check for people who have left
+    // Check for people who have left the frame
     for (const [id, person] of this.trackedPeople.entries()) {
       if (now - person.lastSeen > this.INACTIVITY_THRESHOLD) {
         this.trackedPeople.delete(id);
@@ -185,19 +200,16 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
         const box = person.box;
         ctx.strokeStyle = '#1178C0';
         ctx.lineWidth = 4;
-        // FIX: Use `box.x` and `box.y` instead of `box.originX` and `box.originY` to match the TrackedPerson interface.
         ctx.strokeRect(box.x, box.y, box.width, box.height);
 
         const dwellTime = ((now - person.startTime) / 1000).toFixed(0);
         const label = `ID ${person.id} | ${person.gender} | ${person.age}y | ${dwellTime}s`;
         
         ctx.fillStyle = '#1178C0';
-        ctx.font = '14px Inter';
+        ctx.font = '14px Inter, sans-serif';
         const textWidth = ctx.measureText(label).width;
-        // FIX: Use `box.x` and `box.y` instead of `box.originX` and `box.originY`.
         ctx.fillRect(box.x, box.y - 20, textWidth + 10, 20);
         ctx.fillStyle = 'white';
-        // FIX: Use `box.x` and `box.y` instead of `box.originX` and `box.originY`.
         ctx.fillText(label, box.x + 5, box.y - 5);
     }
   }
@@ -205,7 +217,7 @@ export class CameraComponent implements AfterViewInit, OnDestroy {
   private handleError(message: string, error?: any) {
     this.status.set('error');
     this.errorMessage.set(message);
-    if (error) console.error(error);
+    if (error) console.error(message, error);
     this.cdr.detectChanges();
   }
 }

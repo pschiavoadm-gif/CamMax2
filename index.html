@@ -1,41 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-g">
-  <title>Vision AI People Counter</title>
+  <meta charset="utf-8">
+  <title>Camera Viewer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            'brand-cyan': '#1178C0',
-            'brand-light-gray': '#F5F6F7',
-            'brand-dark-gray': '#334155',
-            'brand-medium-gray': '#94a3b8',
-          }
-        }
-      }
-    }
-  </script>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.12/vision_bundle.js"></script>
 <script type="importmap">
 {
   "imports": {
     "rxjs": "https://aistudiocdn.com/rxjs@^7.8.2?conditions=es2015",
     "rxjs/operators": "https://aistudiocdn.com/rxjs@^7.8.2/operators?conditions=es2015",
-    "rxjs/ajax": "https://aistudiocdn.com/rxjs@^7.8.2/ajax?conditions=es2015",
-    "rxjs/webSocket": "https://aistudiocdn.com/rxjs@^7.8.2/webSocket?conditions=es2015",
-    "rxjs/testing": "https://aistudiocdn.com/rxjs@^7.8.2/testing?conditions=es2015",
-    "rxjs/fetch": "https://aistudiocdn.com/rxjs@^7.8.2/fetch?conditions=es2015",
     "@angular/compiler": "https://next.esm.sh/@angular/compiler@^20.3.10?external=rxjs",
     "@angular/platform-browser": "https://next.esm.sh/@angular/platform-browser@^20.3.10?external=rxjs",
     "@angular/common": "https://next.esm.sh/@angular/common@^20.3.10?external=rxjs",
@@ -45,7 +20,7 @@
 }
 </script>
 </head>
-<body class="bg-brand-light-gray font-sans antialiased">
+<body class="bg-gray-900 text-white font-sans antialiased">
   <app-root></app-root>
 </body>
 </html>
