@@ -14,9 +14,7 @@
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-          <th scope="col" class="relative px-6 py-3">
-            <span class="sr-only">Editar</span>
-          </th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
@@ -32,8 +30,17 @@
                 {{ branch.cameraStatus }}
               </span>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-              <a href="#" class="text-brand-cyan hover:text-blue-800">Editar</a>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <button
+                (click)="toggleCameraStatus(branch.id)"
+                class="text-white font-semibold py-1 px-3 rounded-md text-xs shadow-sm transition-colors"
+                [class]="branch.cameraStatus === 'online' ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'">
+                @if (branch.cameraStatus === 'online') {
+                  <span>Apagar Cámara</span>
+                } @else {
+                  <span>Encender Cámara</span>
+                }
+              </button>
             </td>
           </tr>
         }

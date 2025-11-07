@@ -70,4 +70,20 @@ export class BranchService {
       })
     );
   }
+
+  toggleCameraStatus(branchId: string) {
+    this._branches.update(branches =>
+      branches.map(branch => {
+        if (branch.id === branchId) {
+          const newStatus = branch.cameraStatus === 'online' ? 'offline' : 'online';
+          const newStats = { ...branch.stats };
+          if (newStatus === 'offline') {
+            newStats.currentPeople = 0;
+          }
+          return { ...branch, cameraStatus: newStatus, stats: newStats };
+        }
+        return branch;
+      })
+    );
+  }
 }

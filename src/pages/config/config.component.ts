@@ -11,4 +11,8 @@ import { BranchService } from '../../services/branch.service';
 export class ConfigComponent {
   private branchService = inject(BranchService);
   branches = this.branchService.branches;
+
+  toggleCameraStatus(branchId: string) {
+    this.branchService.toggleCameraStatus(branchId);
+  }
 }
